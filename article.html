@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Horizon | Article</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  body.article {
+    margin:0;
+    font-family: Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    background:#fafafa;
+  }
+
+  /* Navigation */
+  nav{
+    background: linear-gradient(to right,#1565c0,#1976d2);
+    padding:1rem 2rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  nav .logo a { color:white; font-weight:bold; font-size:16px; text-decoration:none; }
+  nav .links a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; font-size:14px; }
+  nav .links a:hover { text-decoration:underline; }
+
+  /* Banner */
+  header{
+    background: linear-gradient(to right,#1565c0,#1976d2);
+    color:white;
+    padding:4rem 2rem;
+    text-align:center;
+  }
+  header h1{font-size:3rem;margin:0;}
+  header p{font-size:1.2rem;margin-top:0.5rem;}
+
+  /* Article Content */
+  .article-container{
+    padding:2rem;
+    max-width:800px;
+    margin:auto;
+    flex:1;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  }
+  .article-container h2{margin-top:0;}
+  .article-container p{margin-bottom:1rem;line-height:1.6;}
+  
+  /* Footer */
+  footer{
+    background:linear-gradient(to right,#1565c0,#1976d2);
+    color:white;
+    text-align:center;
+    padding:1rem;
+    margin-top:auto;
+  }
+  footer a{color:white;margin:0 5px;text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body class="article">
+
+<!-- Navigation -->
+<nav>
+  <div class="logo"><a href="index.html"><strong>Beyond Horizon</strong></a></div>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="news.html">News</a>
+    <a href="sports.html">Sports</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- Banner -->
+<header>
+  <h1>Beyond Horizon</h1>
+  <p>Article</p>
+</header>
+
+<!-- Article Container -->
+<div class="article-container" id="article-content">
+  <h2>Loading...</h2>
+  <p>Please wait while the article loads.</p>
+</div>
+
+<!-- Footer -->
+<footer>
+<p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+</footer>
+
+<script>
+// Helper: get URL parameter
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+async function loadArticle() {
+  const articleId = getQueryParam('id');
+  const container = document.getElementById('article-content');
+
+  if(!articleId){
+    container.innerHTML = "<h2>Article not found</h2><p>No article ID specified.</p>";
+    return;
+  }
+
+  // Fetch news and sports JSON
+  const [news, sports] = await Promise.all([
+    fetch('data/news.json').then(res=>res.json()),
+    fetch('data/sports.json').then(res=>res.json())
+  ]);
+
+  const allArticles = [...news, ...sports];
+
+  const article = allArticles.find(a => a.id === articleId);
+
+  if(!article){
+    container.innerHTML = "<h2>Article not found</h2><p>The requested article does not exist.</p>";
+    return;
+  }
+
+  // Display article
+  container.innerHTML = `
+    <h2>${article.title}</h2>
+    <p>${article.content}</p>
+  `;
+}
+
+// Initialize
+loadArticle();
+</script>
+
+</body>
+</html>

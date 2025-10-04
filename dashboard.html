@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Beyond Horizon</title>
+<link rel="icon" href="assets/images/favicon.ico">
+<style>
+body {margin:0;font-family:Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f5f5f5;}
+nav {background:#1976d2;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+nav .logo {color:white;font-weight:bold;cursor:pointer;}
+nav .links button {margin-left:15px;padding:0.5rem 1rem;background:#42a5f5;border:none;color:white;border-radius:5px;cursor:pointer;font-weight:bold;}
+nav .links button:hover {background:#64b5f6;}
+header {background:#1976d2;color:white;padding:1rem 2rem;text-align:center;}
+.container {padding:2rem;max-width:900px;margin:auto;flex:1;}
+form {background:white;padding:2rem;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:2rem;}
+form input, form select, form textarea {width:100%;padding:0.5rem;margin-bottom:1rem;border:1px solid #ccc;border-radius:5px;}
+form button {background:#1976d2;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;cursor:pointer;font-weight:bold;}
+form button:hover {background:#42a5f5;}
+#stats {background:white;padding:1rem 2rem;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:2rem;}
+.drag-drop {border:2px dashed #ccc;padding:1rem;text-align:center;border-radius:5px;margin-bottom:1rem;cursor:pointer;color:#555;}
+.drag-drop.dragover {border-color:#1976d2;color:#1976d2;}
+footer {background:#1976d2;color:white;text-align:center;padding:1rem;margin-top:auto;}
+.image-preview {display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem;}
+.image-preview img {width:100px;height:100px;object-fit:cover;border-radius:5px;}
+.article-card {border:1px solid #ddd;padding:1rem;border-radius:8px;margin:1rem 0;display:flex;flex-direction:column;}
+.article-card h3 {margin:0 0 10px;}
+.article-card button {margin-right:10px;padding:0.3rem 0.8rem;font-size:0.9rem;border:none;border-radius:5px;cursor:pointer;}
+.article-card .edit {background:#42a5f5;color:white;}
+.article-card .delete {background:#e53935;color:white;}
+.article-card .clicks {margin-top:5px;font-size:0.85rem;color:#555;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="showForm()">Beyond Horizon</div>
+  <div class="links">
+    <button onclick="showStats()">Stats</button>
+    <button onclick="logout()">Log Out</button>
+  </div>
+</nav>
+
+<header>
+<h1>Dashboard</h1>
+<p>Post New Articles</p>
+</header>
+
+<div class="container">
+
+<!-- Stats section -->
+<div id="stats" style="display:none;"></div>
+
+<!-- Article form -->
+<form id="articleForm" onsubmit="event.preventDefault(); saveArticle();">
+  <input type="text" id="title" placeholder="Article Title" required>
+  <textarea id="content" placeholder="Article Content" rows="5" required></textarea>
+  <input type="text" id="editor" placeholder="Editor Name" required>
+  <select id="category" required>
+    <option value="">Select Category</option>
+    <option value="news">News</option>
+    <option value="sports">Sports</option>
+  </select>
+
+  <div class="drag-drop" id="dropArea">Drag & Drop Photos Here or Click to Upload</div>
+  <input type="file" id="fileInput" multiple style="display:none;">
+  <div class="image-preview" id="imagePreview"></div>
+
+  <button type="submit">Post Article</button>
+</form>
+
+</div>
+
+<footer>&copy; 2025 Beyond Horizon | Dashboard</footer>
+
+<script>
+// Show/Hide sections
+function showStats() {
+  document.getElementById('articleForm').style.display='none';
+  const statsDiv=document.getElementById('stats');
+  statsDiv.style.display='block';
+  renderStats();
+}
+
+function showForm(){
+  document.getElementById('stats').style.display='none';
+  document.getElementById('articleForm').style.display='block';
+}
+
+function logout(){
+  alert('Logged out successfully!');
+  window.location.href='login.html';
+}
+
+// Drag & Drop
+const dropArea = document.getElementById('dropArea');
+const fileInput = document.getElementById('fileInput');
+const imagePreview = document.getElementById('imagePreview');
+let images=[];
+let editingArticle = null;
+
+dropArea.addEventListener('click',()=>fileInput.click());
+dropArea.addEventListener('dragover', e=>{ e.preventDefault(); dropArea.classList.add('dragover'); });
+dropArea.addEventListener('dragleave', e=>{ dropArea.classList.remove('dragover'); });
+dropArea.addEventListener('drop', e=>{
+  e.preventDefault();
+  dropArea.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e=>handleFiles(e.target.files));
+
+function handleFiles(files){
+  Array.from(files).forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      images.push({src:e.target.result, credit:''});
+      const img = document.createElement('img');
+      img.src=e.target.result;
+      imagePreview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// Post or Save article
+function saveArticle(){
+  const title = document.getElementById('title').value.trim();
+  const content = document.getElementById('content').value.trim();
+  const editor = document.getElementById('editor').value.trim();
+  const category = document.getElementById('category').value;
+  if(!title || !content || !editor || !category){ alert('Please fill all fields'); return; }
+
+  const storageKey = category==='news'?'newsArticles':'sportsArticles';
+  let articles = JSON.parse(localStorage.getItem(storageKey))||[];
+
+  const articleData = {
+    id: editingArticle ? editingArticle.id : `article-${Date.now()}`,
+    title, content, editor, category, date:new Date().toISOString(), images, clicks: editingArticle ? editingArticle.clicks : 0
+  };
+
+  // If editing, remove old entry
+  if(editingArticle){
+    articles = articles.filter(a=>a.id!==editingArticle.id);
+    editingArticle = null;
+  }
+
+  articles.push(articleData);
+  localStorage.setItem(storageKey, JSON.stringify(articles));
+
+  // Broadcast update
+  const bc = new BroadcastChannel('article_channel');
+  bc.postMessage('update');
+
+  // Reset form
+  document.getElementById('articleForm').reset();
+  images=[]; imagePreview.innerHTML='';
+  alert('Article saved successfully!');
+}
+
+// Render Stats
+function renderStats(){
+  const statsDiv=document.getElementById('stats');
+  const news = JSON.parse(localStorage.getItem('newsArticles')) || [];
+  const sports = JSON.parse(localStorage.getItem('sportsArticles')) || [];
+  const allArticles = [...news,...sports].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  statsDiv.innerHTML = '';
+  if(allArticles.length === 0){ statsDiv.innerHTML="<h2>No articles posted yet.</h2>"; return; }
+
+  allArticles.forEach(article=>{
+    const card = document.createElement("div");
+    card.className = "article-card";
+    card.innerHTML = `
+      <h3>${article.title}</h3>
+      <p><b>Editor:</b> ${article.editor} | <b>Category:</b> ${article.category}</p>
+      <p>${article.content.substring(0,100)}...</p>
+      <div class="clicks"><b>Clicks:</b> ${article.clicks || 0}</div>
+      <div style="margin-top:10px;">
+        <button class="edit" onclick="editArticle('${article.id}','${article.category}')">Edit</button>
+        <button class="delete" onclick="deleteArticle('${article.id}','${article.category}')">Delete</button>
+      </div>
+    `;
+    statsDiv.appendChild(card);
+  });
+}
+
+// Edit article
+function editArticle(id, category){
+  const storageKey = category==='news'?'newsArticles':'sportsArticles';
+  const articles = JSON.parse(localStorage.getItem(storageKey))||[];
+  const article = articles.find(a=>a.id===id);
+  if(!article) return;
+
+  // Fill form
+  document.getElementById('title').value = article.title;
+  document.getElementById('content').value = article.content;
+  document.getElementById('editor').value = article.editor;
+  document.getElementById('category').value = article.category;
+
+  images = article.images || [];
+  imagePreview.innerHTML='';
+  images.forEach(img=>{ const i = document.createElement('img'); i.src=img.src; imagePreview.appendChild(i); });
+
+  editingArticle = article;
+  showForm();
+}
+
+// Delete article
+function deleteArticle(id, category){
+  const storageKey = category==='news'?'newsArticles':'sportsArticles';
+  let articles = JSON.parse(localStorage.getItem(storageKey))||[];
+  articles = articles.filter(a=>a.id!==id);
+  localStorage.setItem(storageKey, JSON.stringify(articles));
+  renderStats();
+}
+
+// Broadcast listener for real-time updates
+const bc = new BroadcastChannel('article_channel');
+bc.onmessage = () => { if(document.getElementById('stats').style.display==='block') renderStats(); };
+</script>
+
+</body>
+</html>

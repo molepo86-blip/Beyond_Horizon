@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Horizon | Published Articles</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+body{margin:0;font-family:Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#fafafa;}
+nav{background:#37474f;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+nav .logo a{color:white;font-weight:bold;font-size:16px;text-decoration:none;}
+nav .links a{color:white;margin-left:15px;text-decoration:none;font-weight:bold;font-size:14px;}
+nav .links a:hover{text-decoration:underline;}
+header{background:#455a64;color:white;padding:2rem;text-align:center;}
+header h1{margin:0;font-size:2rem;}
+header p{margin-top:0.5rem;font-size:1rem;}
+.container{padding:2rem;max-width:1000px;margin:auto;flex:1;display:grid;grid-gap:2rem;}
+.article-card{background:white;padding:1.5rem;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.article-card img{max-width:100%;margin:1rem 0;border-radius:5px;}
+.article-card h2{margin-top:0;}
+.article-card p{margin-bottom:1rem;}
+footer{background:#37474f;color:white;text-align:center;padding:1rem;margin-top:auto;}
+footer a{color:white;margin:0 5px;text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="dashboard.html"><strong>Beyond Horizon</strong></a></div>
+  <div class="links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Logout</a>
+  </div>
+</nav>
+
+<header>
+  <h1>Published Articles</h1>
+  <p>All articles from News & Sports</p>
+</header>
+
+<div class="container" id="articles-container"></div>
+
+<footer>
+<p>&copy; 2025 Beyond Horizon</p>
+</footer>
+
+<script>
+const container = document.getElementById('articles-container');
+
+function renderArticles(){
+  const news = JSON.parse(localStorage.getItem('newsArticles'))||[];
+  const sports = JSON.parse(localStorage.getItem('sportsArticles'))||[];
+  const allArticles = [...news, ...sports].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  container.innerHTML='';
+  if(allArticles.length===0){
+    container.innerHTML="<p>No articles published yet.</p>";
+    return;
+  }
+
+  allArticles.forEach(article=>{
+    const card=document.createElement('div');
+    card.className='article-card';
+    card.innerHTML=`
+      ${article.image?`<img src="${article.image}" alt="Article image">`:""}
+      <h2>${article.title}</h2>
+      <p><em>${article.editor} | ${article.category} | ${new Date(article.date).toLocaleString()}</em></p>
+      ${article.content || ""}
+      ${article.source?`<div class="photo-credit">Photo: ${article.source}</div>`:""}
+    `;
+    container.appendChild(card);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", renderArticles);
+</script>
+
+</body>
+</html>

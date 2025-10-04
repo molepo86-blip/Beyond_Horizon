@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Horizon | Article Stats</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#fafafa;}
+nav{background:#37474f;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+nav .logo a{color:white;font-weight:bold;font-size:16px;text-decoration:none;}
+nav .links a{color:white;margin-left:15px;text-decoration:none;font-weight:bold;font-size:14px;}
+nav .links a:hover{text-decoration:underline;}
+header{background:#455a64;color:white;padding:2rem;text-align:center;}
+header h1{margin:0;font-size:2rem;}
+header p{margin-top:0.5rem;font-size:1rem;}
+.container{padding:2rem;max-width:1000px;margin:auto;}
+.stats-card{background:white;padding:1rem;border-radius:10px;margin-bottom:1rem;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.stats-card h3{margin:0;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="dashboard.html"><strong>Beyond Horizon</strong></a></div>
+  <div class="links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Logout</a>
+  </div>
+</nav>
+
+<header>
+  <h1>Article Statistics</h1>
+  <p>Summary of Published Articles</p>
+</header>
+
+<div class="container" id="statsContainer"></div>
+
+<script>
+// Check login
+if(localStorage.getItem('loggedIn')!=='true'){
+  window.location.href='login.html';
+}
+
+function loadStats(){
+  const container = document.getElementById('statsContainer');
+  const news = JSON.parse(localStorage.getItem('newsArticles'))||[];
+  const sports = JSON.parse(localStorage.getItem('sportsArticles'))||[];
+  const total = news.length + sports.length;
+
+  const lastNews = news.length ? new Date(news[news.length-1].date).toLocaleString() : 'N/A';
+  const lastSports = sports.length ? new Date(sports[sports.length-1].date).toLocaleString() : 'N/A';
+
+  container.innerHTML = `
+    <div class="stats-card"><h3>Total Articles: ${total}</h3></div>
+    <div class="stats-card"><h3>News Articles: ${news.length}</h3><p>Last Published: ${lastNews}</p></div>
+    <div class="stats-card"><h3>Sports Articles: ${sports.length}</h3><p>Last Published: ${lastSports}</p></div>
+  `;
+}
+
+loadStats();
+</script>
+
+</body>
+</html>

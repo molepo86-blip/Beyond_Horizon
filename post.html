@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post New Article - Beyond Horizon</title>
+<style>
+body { font-family: Arial; margin: 0; background: #fafafa; display:flex; flex-direction:column; min-height:100vh; }
+nav{background:#1976d2;color:white;padding:1rem;}
+nav a{color:white;margin-right:1rem;text-decoration:none;font-weight:bold;}
+.container{padding:2rem; max-width:600px; margin:auto; flex:1;}
+input, textarea, select, button { width:100%; padding:0.5rem; margin-bottom:1rem; border-radius:5px; border:1px solid #ccc; }
+button { background:#1976d2; color:white; border:none; cursor:pointer; font-weight:bold; }
+button:hover { background:#42a5f5; }
+#preview img { max-width:100%; margin-bottom:0.5rem; border-radius:5px; }
+footer{background:#1976d2;color:white;text-align:center;padding:1rem;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="news.html">News</a>
+  <a href="sports.html">Sports</a>
+</nav>
+
+<div class="container">
+  <h2>Post New Article</h2>
+  <form id="postForm">
+    <input type="text" id="title" placeholder="Article Title" required>
+    <textarea id="content" placeholder="Article Content" rows="6" required></textarea>
+    <input type="text" id="editor" placeholder="Editor Name" required>
+    <select id="category" required>
+      <option value="">Select Category</option>
+      <option value="news">News</option>
+      <option value="sports">Sports</option>
+    </select>
+    <input type="file" id="images" multiple accept="image/*">
+    <div id="preview"></div>
+    <button type="submit">Publish Article</button>
+  </form>
+  <p id="status"></p>
+</div>
+
+<footer>
+<p>&copy; 2025 Beyond Horizon</p>
+</footer>
+
+<script>
+const form = document.getElementById('postForm');
+const status = document.getElementById('status');
+const imagesInput = document.getElementById('images');
+const previewDiv = document.getElementById('preview');
+
+let selectedImages = [];
+
+// Preview selected images
+imagesInput.addEventListener('change', function(){
+  previewDiv.innerHTML = '';
+  selectedImages = [];
+  const files = Array.from(this.files);
+  files.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      previewDiv.appendChild(img);
+      selectedImages.push({src:e.target.result, credit:''}); // credit optional
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const title = document.getElementById('title').value.trim();
+  const content = document.getElementById('content').value.trim();
+  const editor = document.getElementById('editor').value.trim();
+  const category = document.getElementById('category').value;
+
+  if(!title || !content || !editor || !category){
+    status.textContent = "All fields are required!";
+    status.style.color = "red";
+    return;
+  }
+
+  const newArticle = {
+    title,
+    content,
+    editor,
+    category,
+    date: new Date().toISOString(),
+    images: selectedImages
+  };
+
+  const storageKey = category === 'news' ? 'newsArticles' : 'sportsArticles';
+  const articles = JSON.parse(localStorage.getItem(storageKey)) || [];
+  articles.unshift(newArticle);
+  localStorage.setItem(storageKey, JSON.stringify(articles));
+
+  // Broadcast update to other pages
+  const bc = new BroadcastChannel('article_channel');
+  bc.postMessage('update');
+
+  status.textContent = "Article published successfully!";
+  status.style.color = "green";
+  form.reset();
+  previewDiv.innerHTML = '';
+  selectedImages = [];
+});
+</script>
+
+</body>
+</html>
