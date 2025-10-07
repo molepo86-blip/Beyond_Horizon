@@ -65,8 +65,8 @@ footer a:hover { text-decoration:underline; }
   <div class="error-message" id="errorMessage">❌ Something went wrong. Please try again later.</div>
 
   <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
-    <!-- Replace with your access key from web3forms.com -->
-    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+    <!-- Your Access Key -->
+    <input type="hidden" name="access_key" value="e6029403-0350-40ee-8506-968b520243c1">
 
     <!-- Custom auto reply -->
     <input type="hidden" name="autoresponse" value="Thank you for contacting Beyond Horizon, we’ll respond within 24 hours.">
@@ -74,7 +74,7 @@ footer a:hover { text-decoration:underline; }
     <!-- Email subject -->
     <input type="hidden" name="subject" value="New Contact Message - Beyond Horizon">
 
-    <!-- Your email (where you'll receive messages) -->
+    <!-- Your email -->
     <input type="hidden" name="replyto" value="molepo86@gmail.com">
 
     <input type="text" name="name" placeholder="Your Name" required>
@@ -91,10 +91,10 @@ footer a:hover { text-decoration:underline; }
 </footer>
 
 <script>
-// add current timestamp
+// Add current timestamp
 document.getElementById("timestamp").value = new Date().toLocaleString();
 
-// handle form submission
+// Handle form submission
 const form = document.getElementById('contactForm');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
