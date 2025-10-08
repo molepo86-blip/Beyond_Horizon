@@ -5,37 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | News</title>
 <style>
-body { margin:0; font-family:Arial,sans-serif; display:flex; flex-direction:column; min-height:100vh; background:#ffebee;}
-nav { background: #b71c1c; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
-nav .logo a { color:white; font-weight:bold; text-decoration:none; font-size:16px; display:flex; align-items:center; }
-nav .logo img { height:40px; margin-right:8px; }
-nav .links a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; font-size:14px;}
-nav .links a:hover{text-decoration:underline;}
-header { background:#f44336; color:white; padding:3rem 2rem; text-align:center; }
-header h1 { margin:0; font-size:2.5rem; }
-header p { margin-top:0.5rem; font-size:1.2rem; }
-.container { padding:2rem; max-width:1000px; margin:auto; flex:1; }
-.search-bar { margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;}
-.search-bar input, .search-bar select { padding:0.5rem; border-radius:5px; border:1px solid #ccc; flex:1;}
-.search-bar button { background:#b71c1c; color:white; padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; font-weight:bold;}
-.search-bar button:hover { background:#f44336; }
-.article-card { background:white; padding:1.5rem; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-bottom:1rem; cursor:pointer;}
-.article-card h2 { margin-top:0; }
-.article-card p { margin:0.5rem 0; }
-.article-card img { max-width:100%; margin:0.5rem 0; border-radius:5px; }
-.image-credit { font-size:0.8rem; color:#555; }
-footer { background:#b71c1c; color:white; text-align:center; padding:1rem; margin-top:auto; }
-footer a { color:white; margin:0 5px; text-decoration:none; }
-footer a:hover { text-decoration:underline; }
+body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f5f5f5;}
+a {text-decoration:none;color:inherit;}
+.container {max-width:1200px;margin:auto;padding:2rem;}
+h1,h2,h3,h4,h5,h6 {margin:0;}
+p {margin:0.5rem 0;line-height:1.5;color:#333;}
+
+/* --- Navigation --- */
+nav {background:#1976d2;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+nav .logo a {display:flex;align-items:center;color:white;font-weight:bold;font-size:18px;}
+nav .logo img {height:40px;margin-right:10px;}
+nav .links a {margin-left:20px;color:white;font-weight:600;font-size:14px;}
+nav .links a:hover {text-decoration:underline;}
+
+/* --- Header --- */
+header {background:#2196f3;color:white;padding:2rem;text-align:center;}
+header h1 {font-size:2rem;font-weight:700;}
+header p {font-size:1.1rem;opacity:0.9;}
+
+/* --- Search Bar --- */
+.search-bar {margin:1.5rem 0; display:flex; gap:0.5rem; flex-wrap:wrap;}
+.search-bar input {padding:0.5rem; border-radius:5px; border:1px solid #ccc; flex:1;}
+.search-bar button {background:#1976d2;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;font-weight:bold;cursor:pointer;}
+.search-bar button:hover {background:#42a5f5;}
+
+/* --- Articles Grid --- */
+.articles-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+.article-card {background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.2s;cursor:pointer;}
+.article-card:hover {transform:translateY(-5px);}
+.article-card img {width:100%;height:180px;object-fit:cover;}
+.article-card-content {padding:1rem;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.article-card-content h2 {font-size:1.1rem;margin-bottom:0.5rem;color:#1976d2;}
+.article-card-content p {font-size:0.95rem;flex:1;}
+
+/* --- Footer --- */
+footer {background:#1976d2;color:white;text-align:center;padding:1rem;margin-top:auto;}
+footer a {color:white;margin:0 5px;}
+footer a:hover{text-decoration:underline;}
+
+/* --- Subscription Modal --- */
+#subscription-modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;}
+#subscription-modal .modal-content {background:white;padding:2rem;border-radius:10px;max-width:400px;width:90%;text-align:center;position:relative;}
+#subscription-modal #modal-close {position:absolute;top:10px;right:15px;cursor:pointer;font-size:18px;font-weight:bold;}
+#subscription-modal input {width:80%;padding:0.5rem;margin-bottom:1rem;border:1px solid #ccc;border-radius:5px;}
+#subscription-modal button {background:#1976d2;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;font-weight:bold;}
 </style>
 </head>
 <body>
 
+<!-- Navigation -->
 <nav>
   <div class="logo">
     <a href="index.html">
       <img src="assets/images/logo.png" alt="Beyond Horizon">
-      <strong>Beyond Horizon</strong>
+      <span>Beyond Horizon</span>
     </a>
   </div>
   <div class="links">
@@ -47,77 +70,107 @@ footer a:hover { text-decoration:underline; }
   </div>
 </nav>
 
+<!-- Header -->
 <header>
-  <h1>News</h1>
-  <p>Latest News Articles</p>
+  <h1>Latest News</h1>
+  <p>Stay up-to-date with the newest articles</p>
 </header>
 
 <div class="container">
+  <!-- Search -->
+  <div class="search-bar">
+    <input type="text" id="keyword" placeholder="Search by keyword...">
+    <input type="text" id="editorSearch" placeholder="Filter by editor...">
+    <button onclick="applyFilter()">Filter</button>
+  </div>
 
-<div class="search-bar">
-  <input type="text" id="keyword" placeholder="Search by keyword...">
-  <input type="text" id="editorSearch" placeholder="Filter by editor...">
-  <button onclick="applyFilter()">Filter</button>
+  <!-- Articles Grid -->
+  <div class="articles-grid" id="articles-container">
+    <p>Loading articles...</p>
+  </div>
 </div>
 
-<div id="articles-container">
-  <p>Loading articles...</p>
-</div>
-
-</div>
-
+<!-- Footer -->
 <footer>
-<p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+  <p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
 </footer>
 
-<script>
-let allArticles = [];
+<!-- Subscription Modal -->
+<div id="subscription-modal">
+  <div class="modal-content">
+    <span id="modal-close">&times;</span>
+    <h2>Subscribe to Beyond Horizon</h2>
+    <p>Get the latest news straight to your inbox!</p>
+    <input type="email" id="subscriber-email" placeholder="Enter your email">
+    <button id="subscribe-btn">Subscribe</button>
+  </div>
+</div>
 
-// Fetch articles from backend
+<script>
+// --- Load Articles ---
+let allArticles = [];
 function loadArticles(){
   fetch('get_articles.php?category=news')
-    .then(res=>res.json())
-    .then(data=>{
+    .then(res => res.json())
+    .then(data => {
       allArticles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
       renderArticles(allArticles);
     })
-    .catch(err=>{ 
-      console.error(err);
-      document.getElementById('articles-container').innerHTML='<p>Error loading articles.</p>';
-    });
+    .catch(err=>{console.error(err);document.getElementById('articles-container').innerHTML='<p>Error loading articles.</p>';});
 }
 
 function renderArticles(articles){
   const container = document.getElementById('articles-container');
   container.innerHTML='';
-  if(articles.length===0){ container.innerHTML='<p>No news articles found.</p>'; return; }
+  if(articles.length===0){container.innerHTML='<p>No news articles found.</p>'; return;}
 
   articles.forEach(article=>{
     const card = document.createElement('div');
     card.className='article-card';
     card.innerHTML = `
       ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
-      <h2>${article.title}</h2>
-      <p><em>${article.author} | ${new Date(article.published_at).toLocaleString()}</em></p>
-      <p>${article.content.substring(0,150)}...</p>
+      <div class="article-card-content">
+        <h2>${article.title}</h2>
+        <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
+        <p>${article.content.substring(0,120)}...</p>
+      </div>
     `;
-    card.addEventListener('click', ()=>{ window.location.href=`article.html?slug=${article.slug}`; });
+    card.addEventListener('click',()=>{
+      if(!localStorage.getItem('subscribed')){
+        showSubscriptionModal();
+      } else {
+        window.location.href = `article.html?slug=${article.slug}`;
+      }
+    });
     container.appendChild(card);
   });
 }
 
-// Filter functionality
+// --- Filter ---
 function applyFilter(){
-  const keyword=document.getElementById('keyword').value.toLowerCase();
-  const editor=document.getElementById('editorSearch').value.toLowerCase();
-  const filtered = allArticles.filter(a=> 
-    (a.title.toLowerCase().includes(keyword) || a.content.toLowerCase().includes(keyword)) && 
-    a.author.toLowerCase().includes(editor)
-  );
+  const keyword = document.getElementById('keyword').value.toLowerCase();
+  const editor = document.getElementById('editorSearch').value.toLowerCase();
+  const filtered = allArticles.filter(a=> (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) && a.author.toLowerCase().includes(editor));
   renderArticles(filtered);
 }
 
-// Initial load
+// --- Subscription Modal Logic ---
+function showSubscriptionModal(){
+  document.getElementById('subscription-modal').style.display='flex';
+}
+
+document.getElementById('modal-close').addEventListener('click',()=>{
+  document.getElementById('subscription-modal').style.display='none';
+});
+
+document.getElementById('subscribe-btn').addEventListener('click',()=>{
+  const email = document.getElementById('subscriber-email').value.trim();
+  if(!email){alert('Please enter your email');return;}
+  localStorage.setItem('subscribed', email);
+  alert('Thank you for subscribing!');
+  document.getElementById('subscription-modal').style.display='none';
+});
+
 loadArticles();
 </script>
 
