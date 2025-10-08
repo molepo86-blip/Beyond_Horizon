@@ -4,22 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Sports</title>
-<meta name="description" content="Stay updated with the latest sports news, scores, and events from Beyond Horizon, your trusted source in South Africa.">
-<meta name="keywords" content="Sports, News, Beyond Horizon, South Africa, Scores, Events">
 <link rel="icon" href="assets/images/favicon.ico">
-
-<!-- Open Graph / Social Sharing -->
-<meta property="og:title" content="Beyond Horizon | Sports">
-<meta property="og:description" content="Stay updated with the latest sports news, scores, and events from Beyond Horizon, your trusted source in South Africa.">
-<meta property="og:image" content="assets/images/og-image.png">
-<meta property="og:url" content="https://yourdomain.com/sports.html">
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Beyond Horizon | Sports">
-<meta name="twitter:description" content="Stay updated with the latest sports news, scores, and events from Beyond Horizon, your trusted source in South Africa.">
-<meta name="twitter:image" content="assets/images/og-image.png">
-
 <style>
 body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f0f4f0;}
 a {text-decoration:none;color:inherit;}
@@ -46,7 +31,7 @@ header p {font-size:1.1rem;opacity:0.9;}
 .search-bar button:hover {background:#66bb6a;}
 
 /* --- Articles Grid --- */
-.articles-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+.articles-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
 .article-card {background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.2s;cursor:pointer;}
 .article-card:hover {transform:translateY(-5px);}
 .article-card img {width:100%;height:180px;object-fit:cover;}
@@ -124,12 +109,11 @@ footer a:hover{text-decoration:underline;}
 </div>
 
 <script>
-// --- Load Articles ---
 let allArticles = [];
 function loadArticles(){
   fetch('get_articles.php?category=sports')
-    .then(res => res.json())
-    .then(data => {
+    .then(res=>res.json())
+    .then(data=>{
       allArticles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
       renderArticles(allArticles);
     })
@@ -140,15 +124,14 @@ function loadArticles(){
 }
 
 function renderArticles(articles){
-  const container = document.getElementById('articles-container');
+  const container=document.getElementById('articles-container');
   container.innerHTML='';
   if(articles.length===0){container.innerHTML='<p>No sports articles found.</p>'; return;}
-
   articles.forEach(article=>{
-    const card = document.createElement('div');
+    const card=document.createElement('div');
     card.className='article-card';
-    card.innerHTML = `
-      ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
+    card.innerHTML=`
+      ${article.cover_image?`<img src="${article.cover_image}" alt="Cover Image">`:''}
       <div class="article-card-content">
         <h2>${article.title}</h2>
         <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
@@ -156,40 +139,31 @@ function renderArticles(articles){
       </div>
     `;
     card.addEventListener('click',()=>{
-      if(!localStorage.getItem('subscribed')){
-        showSubscriptionModal();
-      } else {
-        window.location.href = `article.html?slug=${article.slug}`;
-      }
+      if(!localStorage.getItem('subscribed')) showSubscriptionModal();
+      else window.location.href=`article.html?slug=${article.slug}`;
     });
     container.appendChild(card);
   });
 }
 
-// --- Filter ---
 function applyFilter(){
-  const keyword = document.getElementById('keyword').value.toLowerCase();
-  const editor = document.getElementById('editorSearch').value.toLowerCase();
-  const filtered = allArticles.filter(a=> 
-    (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) 
+  const keyword=document.getElementById('keyword').value.toLowerCase();
+  const editor=document.getElementById('editorSearch').value.toLowerCase();
+  const filtered = allArticles.filter(a=>
+    (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword))
     && a.author.toLowerCase().includes(editor)
   );
   renderArticles(filtered);
 }
 
-// --- Subscription Modal Logic ---
 function showSubscriptionModal(){
   document.getElementById('subscription-modal').style.display='flex';
 }
-
-document.getElementById('modal-close').addEventListener('click',()=>{
-  document.getElementById('subscription-modal').style.display='none';
-});
-
+document.getElementById('modal-close').addEventListener('click',()=>{document.getElementById('subscription-modal').style.display='none';});
 document.getElementById('subscribe-btn').addEventListener('click',()=>{
-  const email = document.getElementById('subscriber-email').value.trim();
+  const email=document.getElementById('subscriber-email').value.trim();
   if(!email){alert('Please enter your email');return;}
-  localStorage.setItem('subscribed', email);
+  localStorage.setItem('subscribed',email);
   alert('Thank you for subscribing!');
   document.getElementById('subscription-modal').style.display='none';
 });
