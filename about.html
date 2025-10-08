@@ -8,62 +8,104 @@
 <meta name="keywords" content="About, Beyond Horizon, News, Sports, South Africa">
 <link rel="icon" href="assets/images/favicon.ico">
 
-<!-- Open Graph / Social Sharing -->
+<!-- Open Graph -->
 <meta property="og:title" content="Beyond Horizon | About">
 <meta property="og:description" content="Learn more about Beyond Horizon and our mission to deliver reliable news and sports coverage in South Africa.">
 <meta property="og:image" content="assets/images/og-image.png">
 <meta property="og:url" content="https://yourdomain.com/about.html">
 <meta property="og:type" content="website">
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Beyond Horizon | About">
-<meta name="twitter:description" content="Learn more about Beyond Horizon and our mission to deliver reliable news and sports coverage in South Africa.">
-<meta name="twitter:image" content="assets/images/og-image.png">
-
 <link rel="stylesheet" href="assets/css/styles.css">
 <style>
-body {margin:0;font-family:'Plus Jakarta Sans', Arial, sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f9f9f9;color:#333;}
-a {text-decoration:none;color:inherit;}
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  background:#fff5f5;
+}
 
-/* Navigation */
-nav {background:linear-gradient(to right,#1976d2,#42a5f5);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
-nav .logo a {display:flex;align-items:center;color:white;font-weight:bold;font-size:18px;}
-nav .logo img {height:40px;margin-right:10px;}
-nav .links a {color:white;margin-left:20px;font-weight:600;font-size:14px;}
-nav .links a:hover {text-decoration:underline;}
+/* Navbar & Footer */
+nav, footer {
+  background: linear-gradient(to right,#b71c1c,#f44336);
+  color:white;
+}
+nav {
+  padding:1rem 2rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+nav .logo a {
+  color:white;
+  font-weight:bold;
+  font-size:16px;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+}
+nav .logo img {
+  height:32px;
+  margin-right:8px;
+}
+nav .links a {
+  color:white;
+  margin-left:15px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:14px;
+}
+nav .links a:hover { text-decoration:underline; }
 
 /* Header */
-header {background:linear-gradient(to right,#1976d2,#42a5f5);color:white;padding:3rem 2rem;text-align:center;}
-header h1 {margin:0;font-size:2.5rem;font-weight:700;}
-header p {margin-top:0.5rem;font-size:1.2rem;opacity:0.9;}
+header {
+  background: linear-gradient(to right,#b71c1c,#f44336);
+  color:white;
+  padding:3rem 2rem;
+  text-align:center;
+}
+header h1 { margin:0; font-size:2.5rem; }
+header p { margin-top:0.5rem; font-size:1.2rem; }
 
 /* Content */
-.container {padding:2rem;max-width:900px;margin:auto;flex:1;}
-.container h2 {color:#1976d2;font-size:1.5rem;margin-top:1.5rem;}
-.container p {font-size:1rem;line-height:1.7;margin-top:0.5rem;}
-
-/* Team Section */
-.team-section {display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.5rem;margin-top:2rem;}
-.team-card {background:white;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);padding:1.5rem;text-align:center;transition:transform 0.2s;}
-.team-card:hover {transform:translateY(-5px);}
-.team-card img {width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:1rem;}
-.team-card h3 {margin:0.5rem 0;font-size:1.1rem;color:#1976d2;}
-.team-card p {font-size:0.9rem;color:#555;}
+.container {
+  padding:2rem;
+  max-width:800px;
+  margin:auto;
+  flex:1;
+  color:#333;
+}
+.container h2 {
+  color:#b71c1c;
+  margin-bottom:1rem;
+}
+.container p {
+  line-height:1.7;
+  font-size:1rem;
+}
 
 /* Footer */
-footer {background:linear-gradient(to right,#1976d2,#42a5f5);color:white;text-align:center;padding:1rem;margin-top:auto;}
-footer a {color:white;margin:0 5px;}
-footer a:hover {text-decoration:underline;}
+footer {
+  text-align:center;
+  padding:1rem;
+  margin-top:auto;
+}
+footer a {
+  color:white;
+  margin:0 5px;
+  text-decoration:none;
+}
+footer a:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav>
   <div class="logo">
     <a href="index.html">
-      <img src="assets/images/logo.png" alt="Beyond Horizon">
-      <span>Beyond Horizon</span>
+      <img src="assets/images/logo.png" alt="Beyond Horizon Logo"> 
+      <strong>Beyond Horizon</strong>
     </a>
   </div>
   <div class="links">
@@ -75,44 +117,19 @@ footer a:hover {text-decoration:underline;}
   </div>
 </nav>
 
-<!-- Header -->
 <header>
   <h1>About Us</h1>
   <p>Learn more about Beyond Horizon</p>
 </header>
 
-<!-- Main Content -->
 <div class="container">
   <h2>Our Mission</h2>
-  <p>Beyond Horizon is dedicated to providing trustworthy, factual, and timely news and sports coverage across South Africa. We aim to bridge communities by delivering stories that matter most — empowering readers with insight, context, and clarity.</p>
-
-  <h2>Our Vision</h2>
-  <p>Our vision is to become South Africa’s most reliable digital news platform, where integrity, accuracy, and social impact drive everything we publish.</p>
-
-  <h2>Our Values</h2>
-  <p>We value transparency, accountability, and innovation. Beyond Horizon stands firmly for press freedom and the ethical responsibility that comes with it. Every story undergoes careful editorial review to ensure quality and fairness.</p>
-
-  <h2>Meet Our Team</h2>
-  <div class="team-section">
-    <div class="team-card">
-      <img src="assets/images/team1.jpg" alt="Editor-in-Chief">
-      <h3>James Molepo</h3>
-      <p>Editor-in-Chief</p>
-    </div>
-    <div class="team-card">
-      <img src="assets/images/team2.jpg" alt="Sports Editor">
-      <h3>Thabo Dlamini</h3>
-      <p>Sports Editor</p>
-    </div>
-    <div class="team-card">
-      <img src="assets/images/team3.jpg" alt="Senior Reporter">
-      <h3>Lerato Maseko</h3>
-      <p>Senior Reporter</p>
-    </div>
-  </div>
+  <p>
+    Beyond Horizon aims to provide accurate, timely, and comprehensive news and sports coverage across South Africa. 
+    We focus on stories that matter — delivering trustworthy information and insights that empower readers to stay informed and engaged.
+  </p>
 </div>
 
-<!-- Footer -->
 <footer>
   <p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
 </footer>
