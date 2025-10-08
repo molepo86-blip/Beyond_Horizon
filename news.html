@@ -4,22 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | News</title>
-<meta name="description" content="Beyond Horizon: Latest news updates from South Africa and beyond.">
-<meta name="keywords" content="News, Beyond Horizon, South Africa, Updates, Headlines">
 <link rel="icon" href="assets/images/favicon.ico">
-
-<!-- Open Graph / Social Sharing -->
-<meta property="og:title" content="Beyond Horizon | News">
-<meta property="og:description" content="Beyond Horizon: Latest news updates from South Africa and beyond.">
-<meta property="og:image" content="assets/images/og-image.png">
-<meta property="og:url" content="https://yourdomain.com/news.html">
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Beyond Horizon | News">
-<meta name="twitter:description" content="Beyond Horizon: Latest news updates from South Africa and beyond.">
-<meta name="twitter:image" content="assets/images/og-image.png">
-
 <style>
 body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#ffebee;}
 a {text-decoration:none;color:inherit;}
@@ -124,12 +109,11 @@ footer a:hover{text-decoration:underline;}
 </div>
 
 <script>
-// --- Load Articles ---
 let allArticles = [];
 function loadArticles(){
   fetch('get_articles.php?category=news')
-    .then(res => res.json())
-    .then(data => {
+    .then(res=>res.json())
+    .then(data=>{
       allArticles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
       renderArticles(allArticles);
     })
@@ -140,15 +124,14 @@ function loadArticles(){
 }
 
 function renderArticles(articles){
-  const container = document.getElementById('articles-container');
+  const container=document.getElementById('articles-container');
   container.innerHTML='';
   if(articles.length===0){container.innerHTML='<p>No news articles found.</p>'; return;}
-
   articles.forEach(article=>{
-    const card = document.createElement('div');
+    const card=document.createElement('div');
     card.className='article-card';
-    card.innerHTML = `
-      ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
+    card.innerHTML=`
+      ${article.cover_image?`<img src="${article.cover_image}" alt="Cover Image">`:''}
       <div class="article-card-content">
         <h2>${article.title}</h2>
         <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
@@ -156,33 +139,31 @@ function renderArticles(articles){
       </div>
     `;
     card.addEventListener('click',()=>{
-      if(!localStorage.getItem('subscribed')){
-        showSubscriptionModal();
-      } else {
-        window.location.href = `article.html?slug=${article.slug}`;
-      }
+      if(!localStorage.getItem('subscribed')) showSubscriptionModal();
+      else window.location.href=`article.html?slug=${article.slug}`;
     });
     container.appendChild(card);
   });
 }
 
-// --- Filter ---
 function applyFilter(){
-  const keyword = document.getElementById('keyword').value.toLowerCase();
-  const editor = document.getElementById('editorSearch').value.toLowerCase();
-  const filtered = allArticles.filter(a=> (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) && a.author.toLowerCase().includes(editor));
+  const keyword=document.getElementById('keyword').value.toLowerCase();
+  const editor=document.getElementById('editorSearch').value.toLowerCase();
+  const filtered = allArticles.filter(a=>
+    (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword))
+    && a.author.toLowerCase().includes(editor)
+  );
   renderArticles(filtered);
 }
 
-// --- Subscription Modal ---
 function showSubscriptionModal(){
   document.getElementById('subscription-modal').style.display='flex';
 }
 document.getElementById('modal-close').addEventListener('click',()=>{document.getElementById('subscription-modal').style.display='none';});
 document.getElementById('subscribe-btn').addEventListener('click',()=>{
-  const email = document.getElementById('subscriber-email').value.trim();
+  const email=document.getElementById('subscriber-email').value.trim();
   if(!email){alert('Please enter your email');return;}
-  localStorage.setItem('subscribed', email);
+  localStorage.setItem('subscribed',email);
   alert('Thank you for subscribing!');
   document.getElementById('subscription-modal').style.display='none';
 });
