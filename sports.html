@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Sports</title>
+<meta name="description" content="Stay updated with the latest sports news, scores, and events from Beyond Horizon, your trusted source in South Africa.">
+<meta name="keywords" content="Sports, News, Beyond Horizon, South Africa, Scores, Events">
+<link rel="icon" href="assets/images/favicon.ico">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:title" content="Beyond Horizon | Sports">
+<meta property="og:description" content="Stay updated with the latest sports news, scores, and events from Beyond Horizon, your trusted source in South Africa.">
+<meta property="og:image" content="assets/images/og-image.png">
+<meta property="og:url" content="https://yourdomain.com/sports.html">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Beyond Horizon | Sports">
+<meta name="twitter:description" content="Stay updated with the latest sports news, scores, and events from Beyond Horizon, your trusted source in South Africa.">
+<meta name="twitter:image" content="assets/images/og-image.png">
+
 <style>
 body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f0f4f0;}
 a {text-decoration:none;color:inherit;}
@@ -49,6 +65,7 @@ footer a:hover{text-decoration:underline;}
 #subscription-modal #modal-close {position:absolute;top:10px;right:15px;cursor:pointer;font-size:18px;font-weight:bold;}
 #subscription-modal input {width:80%;padding:0.5rem;margin-bottom:1rem;border:1px solid #ccc;border-radius:5px;}
 #subscription-modal button {background:#2e7d32;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;font-weight:bold;}
+#subscription-modal button:hover {background:#66bb6a;}
 </style>
 </head>
 <body>
@@ -86,7 +103,7 @@ footer a:hover{text-decoration:underline;}
 
   <!-- Articles Grid -->
   <div class="articles-grid" id="articles-container">
-    <p>Loading articles...</p>
+    <p>Loading sports articles...</p>
   </div>
 </div>
 
@@ -116,7 +133,10 @@ function loadArticles(){
       allArticles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
       renderArticles(allArticles);
     })
-    .catch(err=>{console.error(err);document.getElementById('articles-container').innerHTML='<p>Error loading articles.</p>';});
+    .catch(err=>{
+      console.error(err);
+      document.getElementById('articles-container').innerHTML='<p>Error loading articles.</p>';
+    });
 }
 
 function renderArticles(articles){
@@ -150,7 +170,10 @@ function renderArticles(articles){
 function applyFilter(){
   const keyword = document.getElementById('keyword').value.toLowerCase();
   const editor = document.getElementById('editorSearch').value.toLowerCase();
-  const filtered = allArticles.filter(a=> (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) && a.author.toLowerCase().includes(editor));
+  const filtered = allArticles.filter(a=> 
+    (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) 
+    && a.author.toLowerCase().includes(editor)
+  );
   renderArticles(filtered);
 }
 
