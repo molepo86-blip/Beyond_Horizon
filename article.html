@@ -5,62 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Article</title>
 <style>
-body {margin:0;font-family:Arial,sans-serif; background:#f5f5f5;}
-nav, footer {background:#1976d2;color:white; padding:1rem 2rem;}
-nav a, footer a {color:white; text-decoration:none; margin-right:10px;}
-nav a:hover, footer a:hover {text-decoration:underline;}
-.container {max-width:800px;margin:auto;padding:2rem;}
-h1 {color:#1976d2;}
-img {max-width:100%;margin:1rem 0;}
+body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#fff;}
+a {text-decoration:none;color:inherit;}
+.container {max-width:900px;margin:auto;padding:2rem;}
+h1 {margin-bottom:0.5rem;color:#b71c1c;}
+p {line-height:1.6;color:#333;margin-bottom:1rem;}
+header, footer {background:#b71c1c;color:white;text-align:center;padding:1rem;}
+footer a {color:white;margin:0 5px;}
+footer a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="news.html">News</a>
-  <a href="sports.html">Sports</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-</nav>
+<header>
+  <h1>Beyond Horizon</h1>
+</header>
 
-<div class="container">
-  <h1 id="article-title">Loading...</h1>
-  <p><em id="article-meta"></em></p>
-  <img id="article-image" src="" alt="" style="display:none;">
-  <p id="article-content"></p>
+<div class="container" id="article-container">
+  <p>Loading article...</p>
 </div>
 
 <footer>
-<p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+  <p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
 </footer>
 
 <script>
-// Get slug from URL
-const params = new URLSearchParams(window.location.search);
-const slug = params.get('slug');
-
-if (!slug) {
-    document.getElementById('article-title').innerText = "Article not found.";
-} else {
-    fetch(`get_articles.php?category=news`) // Fetch all news first
-        .then(res => res.json())
-        .then(data => {
-            const article = data.find(a => a.slug === slug);
-            if (!article) {
-                document.getElementById('article-title').innerText = "Article not found.";
-                return;
-            }
-            document.getElementById('article-title').innerText = article.title;
-            document.getElementById('article-meta').innerText = `${article.author} | ${new Date(article.published_at).toLocaleDateString()}`;
-            if (article.cover_image) {
-                const img = document.getElementById('article-image');
-                img.src = article.cover_image;
-                img.style.display = 'block';
-            }
-            document.getElementById('article-content').innerText = article.content;
-        });
+// --- Helper: Get slug from URL ---
+function getSlug() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('slug');
 }
+
+// --- Load article ---
+function loadArticle(){
+  const slug = getSlug();
+  if(!slug){ document.getElementById('article-container').innerHTML = '<p>Article not found.</p>'; return; }
+
+  fetch('get_articles.php')
+    .then(res => res.json())
+    .then(data => {
+      const article = data.find(a => a.slug === slug);
+      if(!article){ document.getElementById('article-container').innerHTML = '<p>Article not found.</p>'; return; }
+
+      const container = document.getElementById('article-container');
+      container.innerHTML = `
+        ${article.cover_image ? `<img src="${article.cover_image}" style="width:100%;margin-bottom:1rem;" alt="Cover Image">` : ''}
+        <h1>${article.title}</h1>
+        <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
+        <p>${article.content}</p>
+      `;
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('article-container').innerHTML = '<p>Error loading article.</p>';
+    });
+}
+
+loadArticle();
 </script>
 
 </body>
