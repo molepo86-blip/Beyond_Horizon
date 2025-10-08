@@ -5,13 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Home</title>
 <style>
-/* --- General Styles --- */
 body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f5f5f5;}
 a {text-decoration:none;color:inherit;}
 .container {max-width:1200px;margin:auto;padding:2rem;}
 h1,h2,h3,h4,h5,h6 {margin:0;}
 p {margin:0.5rem 0;line-height:1.5;color:#333;}
-button {cursor:pointer;}
 
 /* --- Navigation --- */
 nav {background:#1976d2;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
@@ -20,18 +18,24 @@ nav .logo img {height:40px;margin-right:10px;}
 nav .links a {margin-left:20px;color:white;font-weight:600;font-size:14px;}
 nav .links a:hover {text-decoration:underline;}
 
-/* --- Header Hero --- */
-header {background:#2196f3;color:white;padding:3rem 2rem;text-align:center;}
-header h1 {font-size:2.5rem;font-weight:700;}
-header p {font-size:1.2rem;opacity:0.9;}
+/* --- Header --- */
+header {background:#2196f3;color:white;padding:2rem;text-align:center;}
+header h1 {font-size:2rem;font-weight:700;}
+header p {font-size:1.1rem;opacity:0.9;}
+
+/* --- Search Bar --- */
+.search-bar {margin:1.5rem 0; display:flex; gap:0.5rem; flex-wrap:wrap;}
+.search-bar input {padding:0.5rem; border-radius:5px; border:1px solid #ccc; flex:1;}
+.search-bar button {background:#1976d2;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;font-weight:bold;cursor:pointer;}
+.search-bar button:hover {background:#42a5f5;}
 
 /* --- Featured Articles --- */
-.featured-articles {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
-.article-card {background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.2s;}
+.articles-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+.article-card {background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.2s;cursor:pointer;}
 .article-card:hover {transform:translateY(-5px);}
-.article-card img {width:100%;height:200px;object-fit:cover;}
+.article-card img {width:100%;height:180px;object-fit:cover;}
 .article-card-content {padding:1rem;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
-.article-card-content h2 {font-size:1.2rem;margin-bottom:0.5rem;color:#1976d2;}
+.article-card-content h2 {font-size:1.1rem;margin-bottom:0.5rem;color:#1976d2;}
 .article-card-content p {font-size:0.95rem;flex:1;}
 
 /* --- Footer --- */
@@ -66,16 +70,23 @@ footer a:hover{text-decoration:underline;}
   </div>
 </nav>
 
-<!-- Hero -->
+<!-- Header -->
 <header>
-  <h1>Beyond Horizon</h1>
-  <p>Stay updated with the latest news and sports articles</p>
+  <h1>Welcome to Beyond Horizon</h1>
+  <p>Latest news and sports updates at your fingertips</p>
 </header>
 
 <div class="container">
-  <h2>Featured Articles</h2>
-  <div class="featured-articles" id="featured-container">
-    <p>Loading articles...</p>
+  <!-- Search -->
+  <div class="search-bar">
+    <input type="text" id="keyword" placeholder="Search by keyword...">
+    <input type="text" id="editorSearch" placeholder="Filter by editor...">
+    <button onclick="applyFilter()">Filter</button>
+  </div>
+
+  <!-- Featured Articles Grid -->
+  <div class="articles-grid" id="articles-container">
+    <p>Loading featured articles...</p>
   </div>
 </div>
 
@@ -97,50 +108,56 @@ footer a:hover{text-decoration:underline;}
 
 <script>
 // --- Load Featured Articles ---
-function loadFeaturedArticles() {
+let allArticles = [];
+function loadArticles(){
   fetch('get_articles.php')
     .then(res => res.json())
     .then(data => {
-      const container = document.getElementById('featured-container');
-      container.innerHTML = '';
-      if(!data || data.length === 0){
-        container.innerHTML = '<p>No articles found.</p>';
-        return;
-      }
-      const articles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at)).slice(0,6);
-      articles.forEach(article=>{
-        const card = document.createElement('div');
-        card.className = 'article-card';
-        card.innerHTML = `
-          ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
-          <div class="article-card-content">
-            <h2>${article.title}</h2>
-            <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
-            <p>${article.content.substring(0,100)}...</p>
-          </div>
-        `;
-        card.addEventListener('click',()=>{
-          if(!localStorage.getItem('subscribed')){
-            showSubscriptionModal();
-          } else {
-            window.location.href = `article.html?slug=${article.slug}`;
-          }
-        });
-        container.appendChild(card);
-      });
+      allArticles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
+      renderArticles(allArticles);
     })
-    .catch(err=>{console.error(err);document.getElementById('featured-container').innerHTML='<p>Error loading articles.</p>';});
+    .catch(err=>{console.error(err);document.getElementById('articles-container').innerHTML='<p>Error loading articles.</p>';});
 }
-loadFeaturedArticles();
+
+function renderArticles(articles){
+  const container = document.getElementById('articles-container');
+  container.innerHTML='';
+  if(articles.length===0){container.innerHTML='<p>No articles found.</p>'; return;}
+
+  articles.forEach(article=>{
+    const card = document.createElement('div');
+    card.className='article-card';
+    card.innerHTML = `
+      ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
+      <div class="article-card-content">
+        <h2>${article.title}</h2>
+        <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
+        <p>${article.content.substring(0,120)}...</p>
+      </div>
+    `;
+    card.addEventListener('click',()=>{
+      if(!localStorage.getItem('subscribed')){
+        showSubscriptionModal();
+      } else {
+        window.location.href = `article.html?slug=${article.slug}`;
+      }
+    });
+    container.appendChild(card);
+  });
+}
+
+// --- Filter ---
+function applyFilter(){
+  const keyword = document.getElementById('keyword').value.toLowerCase();
+  const editor = document.getElementById('editorSearch').value.toLowerCase();
+  const filtered = allArticles.filter(a=> (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) && a.author.toLowerCase().includes(editor));
+  renderArticles(filtered);
+}
 
 // --- Subscription Modal Logic ---
-function showSubscriptionModal(){
-  document.getElementById('subscription-modal').style.display='flex';
-}
+function showSubscriptionModal(){ document.getElementById('subscription-modal').style.display='flex'; }
 
-document.getElementById('modal-close').addEventListener('click',()=>{
-  document.getElementById('subscription-modal').style.display='none';
-});
+document.getElementById('modal-close').addEventListener('click',()=>{ document.getElementById('subscription-modal').style.display='none'; });
 
 document.getElementById('subscribe-btn').addEventListener('click',()=>{
   const email = document.getElementById('subscriber-email').value.trim();
@@ -148,8 +165,9 @@ document.getElementById('subscribe-btn').addEventListener('click',()=>{
   localStorage.setItem('subscribed', email);
   alert('Thank you for subscribing!');
   document.getElementById('subscription-modal').style.display='none';
-  // Optional: send to backend via fetch('subscribe.php')
 });
+
+loadArticles();
 </script>
 
 </body>
