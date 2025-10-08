@@ -67,10 +67,18 @@ footer a:hover { text-decoration:underline; }
 <script>
 let allArticles = [];
 
+// Fetch articles from backend
 function loadArticles(){
-  allArticles = JSON.parse(localStorage.getItem('newsArticles')) || [];
-  allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  renderArticles(allArticles);
+  fetch('get_articles.php?category=news')
+    .then(res=>res.json())
+    .then(data=>{
+      allArticles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
+      renderArticles(allArticles);
+    })
+    .catch(err=>{ 
+      console.error(err);
+      document.getElementById('articles-container').innerHTML='<p>Error loading articles.</p>';
+    });
 }
 
 function renderArticles(articles){
@@ -82,38 +90,29 @@ function renderArticles(articles){
     const card = document.createElement('div');
     card.className='article-card';
     card.innerHTML = `
+      ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
       <h2>${article.title}</h2>
-      <p><em>${article.editor} | ${new Date(article.date).toLocaleString()}</em></p>
+      <p><em>${article.author} | ${new Date(article.published_at).toLocaleString()}</em></p>
       <p>${article.content.substring(0,150)}...</p>
-      ${article.images && article.images.length>0 ? article.images.map(img=>`<img src="${img.src}" alt=""><div class="image-credit">${img.credit||''}</div>`).join('') : ''}
     `;
-    card.addEventListener('click',()=>incrementClick(article.id));
+    // Redirect to single article page (article.html?slug=...)
+    card.addEventListener('click', ()=>{ window.location.href=`article.html?slug=${article.slug}`; });
     container.appendChild(card);
   });
 }
 
-function incrementClick(id){
-  let articles = JSON.parse(localStorage.getItem('newsArticles'))||[];
-  const article = articles.find(a=>a.id===id);
-  if(article){
-    article.clicks=(article.clicks||0)+1;
-    localStorage.setItem('newsArticles', JSON.stringify(articles));
-    const bc = new BroadcastChannel('article_channel');
-    bc.postMessage('update');
-    alert(`You clicked: ${article.title} (Clicks: ${article.clicks})`);
-  }
-}
-
+// Filter functionality
 function applyFilter(){
   const keyword=document.getElementById('keyword').value.toLowerCase();
   const editor=document.getElementById('editorSearch').value.toLowerCase();
-  const filtered = allArticles.filter(a=> (a.title.toLowerCase().includes(keyword)||a.content.toLowerCase().includes(keyword)) && a.editor.toLowerCase().includes(editor));
+  const filtered = allArticles.filter(a=> 
+    (a.title.toLowerCase().includes(keyword) || a.content.toLowerCase().includes(keyword)) && 
+    a.author.toLowerCase().includes(editor)
+  );
   renderArticles(filtered);
 }
 
-const bc = new BroadcastChannel('article_channel');
-bc.onmessage = ()=>loadArticles();
-
+// Initial load
 loadArticles();
 </script>
 
