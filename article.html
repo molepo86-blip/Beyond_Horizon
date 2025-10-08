@@ -4,61 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Article</title>
+<link rel="icon" href="assets/images/favicon.ico">
 <style>
-body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#fff;}
-a {text-decoration:none;color:inherit;}
+body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;background:#fff;}
 .container {max-width:900px;margin:auto;padding:2rem;}
-h1 {margin-bottom:0.5rem;color:#b71c1c;}
-p {line-height:1.6;color:#333;margin-bottom:1rem;}
-header, footer {background:#b71c1c;color:white;text-align:center;padding:1rem;}
-footer a {color:white;margin:0 5px;}
-footer a:hover{text-decoration:underline;}
+h1 {color:#1976d2;margin-bottom:0.5rem;}
+p {line-height:1.5;color:#333;}
+img {max-width:100%;margin:1rem 0;border-radius:5px;}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>Beyond Horizon</h1>
-</header>
 
 <div class="container" id="article-container">
   <p>Loading article...</p>
 </div>
 
-<footer>
-  <p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
-</footer>
-
 <script>
-// --- Helper: Get slug from URL ---
-function getSlug() {
+async function loadArticle() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('slug');
-}
+  const slug = params.get('slug');
+  if(!slug){document.getElementById('article-container').innerHTML='<p>Article not found.</p>'; return;}
 
-// --- Load article ---
-function loadArticle(){
-  const slug = getSlug();
-  if(!slug){ document.getElementById('article-container').innerHTML = '<p>Article not found.</p>'; return; }
+  try {
+    const res = await fetch('get_articles.php');
+    const articles = await res.json();
+    const article = articles.find(a => a.slug === slug);
+    if(!article){document.getElementById('article-container').innerHTML='<p>Article not found.</p>'; return;}
 
-  fetch('get_articles.php')
-    .then(res => res.json())
-    .then(data => {
-      const article = data.find(a => a.slug === slug);
-      if(!article){ document.getElementById('article-container').innerHTML = '<p>Article not found.</p>'; return; }
-
-      const container = document.getElementById('article-container');
-      container.innerHTML = `
-        ${article.cover_image ? `<img src="${article.cover_image}" style="width:100%;margin-bottom:1rem;" alt="Cover Image">` : ''}
-        <h1>${article.title}</h1>
-        <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
-        <p>${article.content}</p>
-      `;
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById('article-container').innerHTML = '<p>Error loading article.</p>';
-    });
+    document.getElementById('article-container').innerHTML = `
+      <h1>${article.title}</h1>
+      <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
+      ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
+      <p>${article.content}</p>
+    `;
+  } catch(err) {
+    console.error(err);
+    document.getElementById('article-container').innerHTML='<p>Error loading article.</p>';
+  }
 }
 
 loadArticle();
