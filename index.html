@@ -5,33 +5,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Home</title>
 <style>
-body { margin:0; font-family:Arial,sans-serif; display:flex; flex-direction:column; min-height:100vh; background:#e3f2fd;}
-nav { background: linear-gradient(to right,#1976d2,#42a5f5); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
-nav .logo a { color:white; font-weight:bold; text-decoration:none; font-size:16px;}
-nav .links a { color:white; margin-left:15px; text-decoration:none; font-weight:bold; font-size:14px;}
-nav .links a:hover{text-decoration:underline;}
-header { background: linear-gradient(to right,#1976d2,#42a5f5); color:white; padding:3rem 2rem; text-align:center; }
-header h1 { margin:0; font-size:2.5rem; }
-header p { margin-top:0.5rem; font-size:1.2rem; }
-.container { padding:2rem; max-width:1000px; margin:auto; flex:1; }
-.search-bar { margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;}
-.search-bar input, .search-bar select { padding:0.5rem; border-radius:5px; border:1px solid #ccc; flex:1;}
-.search-bar button { background:#1976d2; color:white; padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; font-weight:bold;}
-.search-bar button:hover { background:#42a5f5; }
-.article-card { background:white; padding:1.5rem; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-bottom:1rem; cursor:pointer;}
-.article-card h2 { margin-top:0; }
-.article-card p { margin:0.5rem 0; }
-.article-card img { max-width:100%; margin:0.5rem 0; border-radius:5px; }
-.image-credit { font-size:0.8rem; color:#555; }
-footer { background: linear-gradient(to right,#1976d2,#42a5f5); color:white; text-align:center; padding:1rem; margin-top:auto; }
-footer a { color:white; margin:0 5px; text-decoration:none; }
-footer a:hover { text-decoration:underline; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+nav {
+  background: #1976d2;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .logo a {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+nav .logo img {
+  height: 40px;
+  margin-right: 8px;
+}
+nav .links a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+nav .links a:hover {
+  text-decoration: underline;
+}
+header {
+  background: #2196f3;
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+header p {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+.container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+  flex: 1;
+}
+.featured-articles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.article-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.article-card:hover {
+  transform: translateY(-5px);
+}
+.article-card img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+.article-card h2 {
+  margin: 0.5rem 0;
+}
+.article-card p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+footer {
+  background: #1976d2;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}
+footer a {
+  color: white;
+  margin: 0 5px;
+  text-decoration: none;
+}
+footer a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="logo"><a href="index.html"><strong>Beyond Horizon</strong></a></div>
+  <div class="logo">
+    <a href="index.html">
+      <img src="assets/images/logo.png" alt="Beyond Horizon">
+      <strong>Beyond Horizon</strong>
+    </a>
+  </div>
   <div class="links">
     <a href="index.html">Home</a>
     <a href="news.html">News</a>
@@ -43,101 +127,57 @@ footer a:hover { text-decoration:underline; }
 
 <header>
   <h1>Beyond Horizon</h1>
-  <p>Latest Articles</p>
+  <p>Latest Featured Articles</p>
 </header>
 
 <div class="container">
-
-<div class="search-bar">
-  <input type="text" id="keyword" placeholder="Search by keyword...">
-  <input type="text" id="editorSearch" placeholder="Filter by editor...">
-  <select id="categoryFilter">
-    <option value="all">All Categories</option>
-    <option value="news">News</option>
-    <option value="sports">Sports</option>
-  </select>
-  <button onclick="applyFilter()">Filter</button>
-</div>
-
-<div id="articles-container">
-  <p>Loading articles...</p>
-</div>
-
+  <div class="featured-articles" id="featured-container">
+    <p>Loading articles...</p>
+  </div>
 </div>
 
 <footer>
-<p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+  <p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
 </footer>
 
 <script>
-// === Load all articles from localStorage ===
-let allArticles = [];
+// Fetch latest articles and display featured cards
+function loadFeaturedArticles() {
+  fetch('get_articles.php')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('featured-container');
+      container.innerHTML = '';
+      if (!data || data.length === 0) {
+        container.innerHTML = '<p>No articles found.</p>';
+        return;
+      }
 
-function loadArticles() {
-  const news = JSON.parse(localStorage.getItem('newsArticles')) || [];
-  const sports = JSON.parse(localStorage.getItem('sportsArticles')) || [];
-  allArticles = [...news, ...sports].sort((a,b)=>new Date(b.date)-new Date(a.date));
-  renderArticles(allArticles);
+      // Sort by published date descending, take 6 latest
+      const articles = data.sort((a, b) => new Date(b.published_at) - new Date(a.published_at)).slice(0, 6);
+
+      articles.forEach(article => {
+        const card = document.createElement('div');
+        card.className = 'article-card';
+        card.innerHTML = `
+          ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
+          <h2>${article.title}</h2>
+          <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
+          <p>${article.content.substring(0, 100)}...</p>
+        `;
+        card.addEventListener('click', () => {
+          window.location.href = `article.html?slug=${article.slug}`;
+        });
+        container.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('featured-container').innerHTML = '<p>Error loading articles.</p>';
+    });
 }
 
-// Render articles
-function renderArticles(articles){
-  const container = document.getElementById('articles-container');
-  container.innerHTML='';
-  if(articles.length===0){ container.innerHTML='<p>No articles found.</p>'; return; }
-
-  articles.forEach(article=>{
-    const card = document.createElement('div');
-    card.className='article-card';
-    card.innerHTML = `
-      <h2>${article.title}</h2>
-      <p><em>${article.editor} | ${article.category} | ${new Date(article.date).toLocaleString()}</em></p>
-      <p>${article.content.substring(0,150)}...</p>
-      ${article.images && article.images.length>0 ? article.images.map(img=>`<img src="${img.src}" alt=""><div class="image-credit">${img.credit||''}</div>`).join('') : ''}
-    `;
-    card.addEventListener('click',()=>incrementClick(article.id,article.category));
-    container.appendChild(card);
-  });
-}
-
-// Increment click
-function incrementClick(id,category){
-  const storageKey = category==='news'?'newsArticles':'sportsArticles';
-  const articles = JSON.parse(localStorage.getItem(storageKey))||[];
-  const article = articles.find(a=>a.id===id);
-  if(article){
-    article.clicks = (article.clicks||0)+1;
-    localStorage.setItem(storageKey, JSON.stringify(articles));
-    // Broadcast for Dashboard
-    const bc = new BroadcastChannel('article_channel');
-    bc.postMessage('update');
-    // Optional: redirect to full article page
-    alert(`You clicked: ${article.title} (Clicks: ${article.clicks})`);
-  }
-}
-
-// Filter
-function applyFilter(){
-  const keyword=document.getElementById('keyword').value.toLowerCase();
-  const editor=document.getElementById('editorSearch').value.toLowerCase();
-  const category=document.getElementById('categoryFilter').value;
-
-  const filtered = allArticles.filter(article=>{
-    const matchKeyword = article.title.toLowerCase().includes(keyword)||article.content.toLowerCase().includes(keyword);
-    const matchEditor = article.editor.toLowerCase().includes(editor);
-    const matchCategory = category==='all'||article.category===category;
-    return matchKeyword && matchEditor && matchCategory;
-  });
-
-  renderArticles(filtered);
-}
-
-// Broadcast listener for real-time updates
-const bc = new BroadcastChannel('article_channel');
-bc.onmessage=()=>loadArticles();
-
-// Initial load
-loadArticles();
+loadFeaturedArticles();
 </script>
 
 </body>
