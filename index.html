@@ -5,115 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beyond Horizon | Home</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: #f5f5f5;
-}
-nav {
-  background: #1976d2;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-nav .logo a {
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-}
-nav .logo img {
-  height: 40px;
-  margin-right: 8px;
-}
-nav .links a {
-  color: white;
-  margin-left: 15px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 14px;
-}
-nav .links a:hover {
-  text-decoration: underline;
-}
-header {
-  background: #2196f3;
-  color: white;
-  padding: 3rem 2rem;
-  text-align: center;
-}
-header h1 {
-  margin: 0;
-  font-size: 2.5rem;
-}
-header p {
-  margin-top: 0.5rem;
-  font-size: 1.2rem;
-}
-.container {
-  padding: 2rem;
-  max-width: 1000px;
-  margin: auto;
-  flex: 1;
-}
-.featured-articles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-.article-card {
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.article-card:hover {
-  transform: translateY(-5px);
-}
-.article-card img {
-  width: 100%;
-  border-radius: 5px;
-  margin-bottom: 0.5rem;
-}
-.article-card h2 {
-  margin: 0.5rem 0;
-}
-.article-card p {
-  margin: 0.5rem 0;
-  font-size: 0.95rem;
-}
-footer {
-  background: #1976d2;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  margin-top: auto;
-}
-footer a {
-  color: white;
-  margin: 0 5px;
-  text-decoration: none;
-}
-footer a:hover {
-  text-decoration: underline;
-}
+/* --- General Styles --- */
+body {margin:0;font-family:'Plus Jakarta Sans',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;background:#f5f5f5;}
+a {text-decoration:none;color:inherit;}
+.container {max-width:1200px;margin:auto;padding:2rem;}
+h1,h2,h3,h4,h5,h6 {margin:0;}
+p {margin:0.5rem 0;line-height:1.5;color:#333;}
+button {cursor:pointer;}
+
+/* --- Navigation --- */
+nav {background:#1976d2;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+nav .logo a {display:flex;align-items:center;color:white;font-weight:bold;font-size:18px;}
+nav .logo img {height:40px;margin-right:10px;}
+nav .links a {margin-left:20px;color:white;font-weight:600;font-size:14px;}
+nav .links a:hover {text-decoration:underline;}
+
+/* --- Header Hero --- */
+header {background:#2196f3;color:white;padding:3rem 2rem;text-align:center;}
+header h1 {font-size:2.5rem;font-weight:700;}
+header p {font-size:1.2rem;opacity:0.9;}
+
+/* --- Featured Articles --- */
+.featured-articles {display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
+.article-card {background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.2s;}
+.article-card:hover {transform:translateY(-5px);}
+.article-card img {width:100%;height:200px;object-fit:cover;}
+.article-card-content {padding:1rem;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
+.article-card-content h2 {font-size:1.2rem;margin-bottom:0.5rem;color:#1976d2;}
+.article-card-content p {font-size:0.95rem;flex:1;}
+
+/* --- Footer --- */
+footer {background:#1976d2;color:white;text-align:center;padding:1rem;margin-top:auto;}
+footer a {color:white;margin:0 5px;}
+footer a:hover{text-decoration:underline;}
+
+/* --- Subscription Modal --- */
+#subscription-modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;}
+#subscription-modal .modal-content {background:white;padding:2rem;border-radius:10px;max-width:400px;width:90%;text-align:center;position:relative;}
+#subscription-modal #modal-close {position:absolute;top:10px;right:15px;cursor:pointer;font-size:18px;font-weight:bold;}
+#subscription-modal input {width:80%;padding:0.5rem;margin-bottom:1rem;border:1px solid #ccc;border-radius:5px;}
+#subscription-modal button {background:#1976d2;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;font-weight:bold;}
 </style>
 </head>
 <body>
 
+<!-- Navigation -->
 <nav>
   <div class="logo">
     <a href="index.html">
       <img src="assets/images/logo.png" alt="Beyond Horizon">
-      <strong>Beyond Horizon</strong>
+      <span>Beyond Horizon</span>
     </a>
   </div>
   <div class="links">
@@ -125,59 +66,90 @@ footer a:hover {
   </div>
 </nav>
 
+<!-- Hero -->
 <header>
   <h1>Beyond Horizon</h1>
-  <p>Latest Featured Articles</p>
+  <p>Stay updated with the latest news and sports articles</p>
 </header>
 
 <div class="container">
+  <h2>Featured Articles</h2>
   <div class="featured-articles" id="featured-container">
     <p>Loading articles...</p>
   </div>
 </div>
 
+<!-- Footer -->
 <footer>
   <p>&copy; 2025 Beyond Horizon | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
 </footer>
 
+<!-- Subscription Modal -->
+<div id="subscription-modal">
+  <div class="modal-content">
+    <span id="modal-close">&times;</span>
+    <h2>Subscribe to Beyond Horizon</h2>
+    <p>Get the latest news straight to your inbox!</p>
+    <input type="email" id="subscriber-email" placeholder="Enter your email">
+    <button id="subscribe-btn">Subscribe</button>
+  </div>
+</div>
+
 <script>
-// Fetch latest articles and display featured cards
+// --- Load Featured Articles ---
 function loadFeaturedArticles() {
   fetch('get_articles.php')
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('featured-container');
       container.innerHTML = '';
-      if (!data || data.length === 0) {
+      if(!data || data.length === 0){
         container.innerHTML = '<p>No articles found.</p>';
         return;
       }
-
-      // Sort by published date descending, take 6 latest
-      const articles = data.sort((a, b) => new Date(b.published_at) - new Date(a.published_at)).slice(0, 6);
-
-      articles.forEach(article => {
+      const articles = data.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at)).slice(0,6);
+      articles.forEach(article=>{
         const card = document.createElement('div');
         card.className = 'article-card';
         card.innerHTML = `
           ${article.cover_image ? `<img src="${article.cover_image}" alt="Cover Image">` : ''}
-          <h2>${article.title}</h2>
-          <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
-          <p>${article.content.substring(0, 100)}...</p>
+          <div class="article-card-content">
+            <h2>${article.title}</h2>
+            <p><em>${article.author} | ${new Date(article.published_at).toLocaleDateString()}</em></p>
+            <p>${article.content.substring(0,100)}...</p>
+          </div>
         `;
-        card.addEventListener('click', () => {
-          window.location.href = `article.html?slug=${article.slug}`;
+        card.addEventListener('click',()=>{
+          if(!localStorage.getItem('subscribed')){
+            showSubscriptionModal();
+          } else {
+            window.location.href = `article.html?slug=${article.slug}`;
+          }
         });
         container.appendChild(card);
       });
     })
-    .catch(err => {
-      console.error(err);
-      document.getElementById('featured-container').innerHTML = '<p>Error loading articles.</p>';
-    });
+    .catch(err=>{console.error(err);document.getElementById('featured-container').innerHTML='<p>Error loading articles.</p>';});
+}
+loadFeaturedArticles();
+
+// --- Subscription Modal Logic ---
+function showSubscriptionModal(){
+  document.getElementById('subscription-modal').style.display='flex';
 }
 
-loadFeaturedArticles();
+document.getElementById('modal-close').addEventListener('click',()=>{
+  document.getElementById('subscription-modal').style.display='none';
+});
+
+document.getElementById('subscribe-btn').addEventListener('click',()=>{
+  const email = document.getElementById('subscriber-email').value.trim();
+  if(!email){alert('Please enter your email');return;}
+  localStorage.setItem('subscribed', email);
+  alert('Thank you for subscribing!');
+  document.getElementById('subscription-modal').style.display='none';
+  // Optional: send to backend via fetch('subscribe.php')
+});
 </script>
 
 </body>
