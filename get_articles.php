@@ -1,35 +1,32 @@
 <?php
 header('Content-Type: application/json');
 
-// Example: Replace this with your database connection if needed
+// Replace this with a database connection if you have one
 $articles = [
     [
-        "slug" => "south-africa-springboks-victory",
-        "category" => "sports",
-        "title" => "Springboks Secure Victory Against Rival Team",
-        "content" => "The Springboks have triumphed in an exhilarating match...",
-        "author" => "James Molepo",
-        "published_at" => "2025-10-07 14:30:00",
-        "cover_image" => "assets/images/springboks.jpg"
+        "slug" => "breaking-news-1",
+        "title" => "Breaking News 1",
+        "content" => "This is the content of breaking news 1.",
+        "author" => "Editor John",
+        "category" => "news",
+        "cover_image" => "assets/images/news1.jpg",
+        "published_at" => "2025-10-08 08:00:00"
     ],
     [
-        "slug" => "latest-tech-updates",
-        "category" => "news",
-        "title" => "Latest Tech Updates in South Africa",
-        "content" => "Technology is evolving fast in South Africa with new developments...",
-        "author" => "Jane Doe",
-        "published_at" => "2025-10-07 12:00:00",
-        "cover_image" => "assets/images/tech-news.jpg"
+        "slug" => "sports-highlight-1",
+        "title" => "Sports Highlight 1",
+        "content" => "This is the content of sports highlight 1.",
+        "author" => "Editor Mike",
+        "category" => "sports",
+        "cover_image" => "assets/images/sports1.jpg",
+        "published_at" => "2025-10-08 09:00:00"
     ]
 ];
 
-// Get category from query string
-$category = isset($_GET['category']) ? $_GET['category'] : '';
+$category = isset($_GET['category']) ? $_GET['category'] : null;
 
-if($category) {
-    $filtered = array_filter($articles, function($a) use ($category) {
-        return $a['category'] === $category;
-    });
+if($category){
+    $filtered = array_filter($articles, fn($a) => $a['category'] === $category);
     echo json_encode(array_values($filtered));
 } else {
     echo json_encode($articles);
